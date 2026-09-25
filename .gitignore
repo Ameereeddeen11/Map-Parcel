@@ -1,0 +1,13 @@
+# Composer
+/vendor/
+
+# Symfony
+/var/
+.env
+.env.local
+.env.*.local
+
+# OS
+.idea/
+*.DS_Store
+.vscode/

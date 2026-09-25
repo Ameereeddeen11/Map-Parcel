@@ -1,0 +1,5 @@
+controllers:
+  resource:
+    path: ../src/Presentation/Http/
+    namespace: Amir\MapParcel\Presentation\Http
+  type: attribute

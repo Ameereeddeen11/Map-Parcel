@@ -1,0 +1,26 @@
+{
+    "name": "amir/map-parcel",
+    "description": "Map parcel okresu Jicin",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Amir\\MapParcel\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Amiriddin Abdullaev"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "^8.1",
+        "symfony/runtime": "^8.1",
+        "symfony/routing": "^8.1",
+        "symfony/yaml": "^8.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/runtime": true
+        }
+    }
+}
