@@ -11,3 +11,6 @@
 .idea/
 *.DS_Store
 .vscode/
+
+# PHP cache
+.phpunit.result.cache
