@@ -27,7 +27,7 @@ nemuseli jsme tak psát vlastní transformátor souřadnic.
 Katastrální území Jičín + [doplnit počet] sousedních území v okrese
 (povinné minimum jsou 4 KÚ včetně Jičína).
 
-## ## Věci které mě překvapila
+## Věci které mě překvapila
 - ČÚZK ignoruje požadovaný SRS v BBOX parametru, ale respektuje ho,
   když je zadaný explicitně jako `srsName` mimo BBOX.
 - Souřadnice v `gml:posList` jsou v pořadí lat/lon, což se naštěstí
@@ -35,3 +35,13 @@ Katastrální území Jičín + [doplnit počet] sousedních území v okrese
 - Název katastrálního území (`Jičín`) je dostupný přímo v `xlink:title`
   atributu u `administrativeUnit`/`zoning`, takže nebylo potřeba
   parsovat ho z `nationalCadastralReference`.
+- XPath rozlišuje elementz a atributy stejného jména jen prefixem `@` 
+  (`xlink:title` = element, `@xlink:title` = atribut) a to vede na snadnou chybu
+  k přehlednuti, protože chybějíci `@` nevyhodi vyjimku, jen tiše 
+  vrati práydný vysledek.
+
+## Testování
+Parser je pokrytý unit test (PHPUnit) nad realnou fixture staženou z ČÚZK WFS
+(`tests/Fixtures/cuzk_sample_response.xml`) - testy tak neběží proti 
+mockovaným datům, ale proti skutečné struktuře odpovědi, včetně jejich 
+specifik (namespaces, xlink atributy)
