@@ -35,10 +35,15 @@ Katastrální území Jičín + [doplnit počet] sousedních území v okrese
 - Název katastrálního území (`Jičín`) je dostupný přímo v `xlink:title`
   atributu u `administrativeUnit`/`zoning`, takže nebylo potřeba
   parsovat ho z `nationalCadastralReference`.
-- XPath rozlišuje elementz a atributy stejného jména jen prefixem `@` 
+- XPath rozlišuje elementz a atributy stejného jména jen prefixem `@`
   (`xlink:title` = element, `@xlink:title` = atribut) a to vede na snadnou chybu
   k přehlednuti, protože chybějíci `@` nevyhodi vyjimku, jen tiše 
   vrati práydný vysledek.
+- Souřadnice se do GeoJSON odpovědi propsaly jako řetězce místo čísel
+  (`"15.339"` místo `15.339`) – PHP bez `declare(strict_types=1)` typové
+  chyby tiše toleruje, takže se to neprojevilo výjimkou, jen špatným
+  JSON výstupem. Opraveno explicitním castem na `float` jak v parseru,
+  tak znovu na hranici GeoJSON transformace (defense in depth).
 
 ## Testování
 Parser je pokrytý unit test (PHPUnit) nad realnou fixture staženou z ČÚZK WFS
