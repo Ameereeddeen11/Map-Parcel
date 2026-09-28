@@ -66,19 +66,18 @@ určitého přiblížení.
 velikost dlaždice jsem proto volil podle měření (studená odpověď,
 centrum Jičína = nejhustší oblast):
 
-| Dlaždice | Plocha | Čas | XML | Parcel |
-|---|---|---|---|---|
-| 0,01° | ≈ 79 ha | 2,1 s | 3,9 MB | 1 803 |
-| 0,03° | ≈ 710 ha | 7,1 s | 22,8 MB | 10 422 |
+| Dlaždice | Plocha | Síť | Parsing | XML | Parcel |
+|---|---|---|---|---|---|
+| 0,01° | ≈ 79 ha | 2,1 s | 0,04 s | 3,9 MB | 1 803 |
+| 0,03° | ≈ 710 ha | 7,1 s | 0,24 s | 22,8 MB | 10 422 |
 
-Čas roste zhruba jako 1 s režie + 0,6 ms na parcelu. Zvolil jsem 0,01°
-kvůli paměťové náročnosti DOM parseru u velkých odpovědí a kratšímu
-času jednoho dotazu. Nejvíc času při prvním načtení zabírá sekvenční
-stahování dlaždic, proto paralelizace (další krok).
+Parsing je vůči síti zanedbatelný (< 1 % celkového času), takže úzké
+hrdlo je čistě síťové čekání na ČÚZK. Z toho plyne další krok:
+paralelní stahování dlaždic místo sekvenčního.
 
 ## Kompromis 
 - ČÚZK rozlišuje pozemkové parcely a stavební parcely (`st. 4559`). 
   Původní validace vycházela ze tří vzorových parcel a první dlaždice 
   v centru Jičína ji shodila. Fixture s `count=3` nebyla dostatečně 
   reprezentativní, proto jsem přidal parametrizovaný test na všechny 
-  známé formáty.
+   známé formáty.
