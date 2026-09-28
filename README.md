@@ -1,5 +1,11 @@
 # Map-Parcel
 
+## Spuštění přes Docker
+```bash
+docker build -t map-parcel .
+docker run -p 8000:8000 map-parcel
+```
+
 ### Backend architektura
 Zvolil jsem Symfony, ale **bez `symfony/skeleton`** — jen minimální kernel
 (`framework-bundle`, `routing`, `runtime`). Cílem bylo mít plnou kontrolu
