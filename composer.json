@@ -20,7 +20,8 @@
         "symfony/http-client": "^8.1",
         "symfony/cache": "^8.1",
         "symfony/console": "^8.1",
-        "symfony/dotenv": "^8.1"
+        "symfony/dotenv": "^8.1",
+        "nelmio/cors-bundle": "^2.6"
     },
     "config": {
         "allow-plugins": {
