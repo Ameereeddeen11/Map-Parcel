@@ -14,3 +14,5 @@
 
 # PHP cache
 .phpunit.result.cache
+
+scratch.php
