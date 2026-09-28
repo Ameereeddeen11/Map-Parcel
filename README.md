@@ -89,3 +89,10 @@ paralelní stahování dlaždic místo sekvenčního.
 požadavky, než začne číst první odpověď — Symfony HttpClient je díky
 tomu provádí souběžně (bez ručního async/await). Díky tomu první
 načtení pohledu s ~12 dlaždicemi netrvá 12 × 2 s sekvenčně.
+
+### Debugování DI kontejneru
+Přidal jsem `bin/console` (Symfony Console) hlavně kvůli
+`debug:container` – ukázalo se to jako nutné při ladění záhadné
+"circular reference" chyby, která nakonec byla způsobená starým,
+zapomenutým souborem třídy na špatném místě (PSR-4 nesoulad mezi
+cestou a namespace). Bez tohoto nástroje bych to jen hádal.
