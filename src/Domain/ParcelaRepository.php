@@ -4,5 +4,5 @@ namespace Amir\MapParcel\Domain;
 
 interface ParcelaRepository
 {
-    public function najdiVOhranicujicimObdelniku(): array;
+    public function najdiVOhranicujicimObdelniku(BoundingBox $bbox): array;
 }

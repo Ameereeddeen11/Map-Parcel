@@ -9,7 +9,11 @@ services:
       - '../src/Kernel.php'
 
   Amir\MapParcel\Domain\ParcelaRepository:
-    alias: Amir\MapParcel\Infrastructure\Cache\CachedParcelaRepository
+    alias: Amir\MapParcel\Infrastructure\Tiling\TiledParcelaRepository
+
+  Amir\MapParcel\Infrastructure\Tiling\TiledParcelaRepository:
+    arguments:
+      $inner: '@Amir\MapParcel\Infrastructure\Cache\CachedParcelaRepository'
 
   Amir\MapParcel\Infrastructure\Cache\CachedParcelaRepository:
     arguments:
