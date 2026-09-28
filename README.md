@@ -60,3 +60,25 @@ Parcely na hranici dlaždic přijdou dvakrát, proto deduplikace podle
 odmítne (`PrilisVelkaOblastException`), aby jedním pohledem na celý okres
 nespustil stovky dotazů na ČÚZK. Frontend proto ukazuje parcely až od
 určitého přiblížení.
+
+### Velikost dlaždice (měření)
+ČÚZK limity (30 000 objektů, 10 000 ha na dotaz) nejsou omezující,
+velikost dlaždice jsem proto volil podle měření (studená odpověď,
+centrum Jičína = nejhustší oblast):
+
+| Dlaždice | Plocha | Čas | XML | Parcel |
+|---|---|---|---|---|
+| 0,01° | ≈ 79 ha | 2,1 s | 3,9 MB | 1 803 |
+| 0,03° | ≈ 710 ha | 7,1 s | 22,8 MB | 10 422 |
+
+Čas roste zhruba jako 1 s režie + 0,6 ms na parcelu. Zvolil jsem 0,01°
+kvůli paměťové náročnosti DOM parseru u velkých odpovědí a kratšímu
+času jednoho dotazu. Nejvíc času při prvním načtení zabírá sekvenční
+stahování dlaždic, proto paralelizace (další krok).
+
+## Kompromis 
+- ČÚZK rozlišuje pozemkové parcely a stavební parcely (`st. 4559`). 
+  Původní validace vycházela ze tří vzorových parcel a první dlaždice 
+  v centru Jičína ji shodila. Fixture s `count=3` nebyla dostatečně 
+  reprezentativní, proto jsem přidal parametrizovaný test na všechny 
+  známé formáty.
