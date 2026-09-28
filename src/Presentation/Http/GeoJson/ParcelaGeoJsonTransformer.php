@@ -21,7 +21,7 @@ final class ParcelaGeoJsonTransformer
     ): array
     {
         $souradnice = array_map(
-            fn ($bod) => [$bod->lon, $bod->lat],
+            fn ($bod) => [(float) $bod->lon, (float) $bod->lat],
             $parcela->geometrie->body(),
         );
 
