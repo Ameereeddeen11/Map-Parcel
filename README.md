@@ -45,3 +45,9 @@ Parser je pokrytý unit test (PHPUnit) nad realnou fixture staženou z ČÚZK WF
 (`tests/Fixtures/cuzk_sample_response.xml`) - testy tak neběží proti 
 mockovaným datům, ale proti skutečné struktuře odpovědi, včetně jejich 
 specifik (namespaces, xlink atributy)
+
+### Cache
+Přístup k ČÚZK je za rozhraním `ParcelaRepository`. `CachedParcelaRepository`
+je dekorátor kolem živé implementace (Symfony Cache, TTL 24 h). Cache jde
+vypnout přepsáním aliasu v `services.yaml`. Známé omezení: klíč je přesný
+bbox, takže cache se netrefuje při posouvání mapy (řeší další krok: dlaždice).
