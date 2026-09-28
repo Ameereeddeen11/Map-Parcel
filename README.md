@@ -51,3 +51,12 @@ Přístup k ČÚZK je za rozhraním `ParcelaRepository`. `CachedParcelaRepositor
 je dekorátor kolem živé implementace (Symfony Cache, TTL 24 h). Cache jde
 vypnout přepsáním aliasu v `services.yaml`. Známé omezení: klíč je přesný
 bbox, takže cache se netrefuje při posouvání mapy (řeší další krok: dlaždice).
+
+### Dlaždicování
+Bbox z mapy se rozdělí na pevnou mřížku 0,01° (`TileGrid`); každá dlaždice
+se stahuje a cachuje zvlášť, takže se cache trefuje i při posouvání mapy.
+Parcely na hranici dlaždic přijdou dvakrát, proto deduplikace podle
+`nationalCadastralReference`. Dotaz přes víc než 100 dlaždic backend
+odmítne (`PrilisVelkaOblastException`), aby jedním pohledem na celý okres
+nespustil stovky dotazů na ČÚZK. Frontend proto ukazuje parcely až od
+určitého přiblížení.
