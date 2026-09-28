@@ -14,4 +14,15 @@ final class BoundingBox
             throw new \InvalidArgumentException('Neplatný bounding box.');
         }
     }
+
+    public function klic(): string
+    {
+        return sprintf(
+            'parcely_%.5f_%.5f_%.5f_%.5f',
+            $this->jih,
+            $this->zapad,
+            $this->sever,
+            $this->vychod
+        );
+    }
 }

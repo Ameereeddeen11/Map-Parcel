@@ -8,7 +8,7 @@ use Amir\MapParcel\Domain\ParcelniCislo;
 use Amir\MapParcel\Domain\Polygon;
 use Amir\MapParcel\Domain\Souradnice;
 
-final class CuzkParcelaParser
+class CuzkParcelaParser
 {
     public function parsuj(
         string $xml

@@ -4,8 +4,9 @@ namespace Amir\MapParcel\Infrastructure\Cuzk;
 
 use Amir\MapParcel\Domain\BoundingBox;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final class CuzkWfsClient
+class CuzkWfsClient
 {
     private const ENDPOINT = 'https://services.cuzk.cz/wfs/inspire-cp-wfs.asp';
 
@@ -16,7 +17,31 @@ final class CuzkWfsClient
 
     public function stahniSurovaData(BoundingBox $bbox): string
     {
-        $response = $this->httpClient->request('GET', self::ENDPOINT, [
+        return $this->pozadavek($bbox)->getContent();
+    }
+
+    public function stahniSurovaDataDavkove(
+        array $bboxy
+    ): array
+    {
+        $responses = [];
+        foreach ($bboxy as $bbox) {
+            $responses[$bbox->klic()] = $this->pozadavek($bbox);
+        }
+
+        $vysledek = [];
+        foreach ($responses as $klic => $response) {
+            $vysledek[$klic] = $response->getContent();
+        }
+
+        return $vysledek;
+    }
+
+    private function pozadavek(
+        BoundingBox $bbox
+    ): ResponseInterface
+    {
+        return $this->httpClient->request('GET', self::ENDPOINT, [
             'query' => [
                 'service' => 'WFS',
                 'version' => '2.0.0',
@@ -29,7 +54,5 @@ final class CuzkWfsClient
                 'srsName' => 'http://www.opengis.net/def/crs/EPSG/0/4326',
             ],
         ]);
-
-        return $response->getContent();
     }
 }

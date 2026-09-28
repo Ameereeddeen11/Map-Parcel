@@ -81,3 +81,11 @@ paralelní stahování dlaždic místo sekvenčního.
   v centru Jičína ji shodila. Fixture s `count=3` nebyla dostatečně 
   reprezentativní, proto jsem přidal parametrizovaný test na všechny 
    známé formáty.
+
+### Paralelní stahování dlaždic
+`CachedParcelaRepository` nejdřív zjistí, které dlaždice chybí v cache
+(bez volání sítě), a teprve chybějící stáhne přes
+`CuzkWfsClient::stahniSurovaDataDavkove()`. Ten odešle všechny HTTP
+požadavky, než začne číst první odpověď — Symfony HttpClient je díky
+tomu provádí souběžně (bez ručního async/await). Díky tomu první
+načtení pohledu s ~12 dlaždicemi netrvá 12 × 2 s sekvenčně.
