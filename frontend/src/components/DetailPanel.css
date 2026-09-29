@@ -1,0 +1,116 @@
+.detail-panel {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 360px;
+  max-width: calc(100% - 2 * var(--space-4));
+  max-height: calc(100% - 2 * var(--space-4));
+  overflow-y: auto;
+  z-index: 600;
+  border-radius: var(--radius-lg);
+  background: var(--color-neutral-100);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-sizing: border-box;
+}
+
+.detail-panel-sheet-handle {
+  display: none;
+}
+
+.detail-panel-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.detail-panel-top .btn-icon {
+  margin-right: -10px;
+}
+
+.detail-panel-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.detail-panel-label {
+  font-size: 13px;
+  color: var(--color-neutral-700);
+}
+
+.detail-panel-number {
+  font-family: var(--font-heading);
+  font-size: 40px;
+  line-height: 1.05;
+  color: var(--color-text);
+}
+
+.detail-panel-facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--space-6);
+  row-gap: 0;
+  font-size: 14px;
+}
+
+.detail-panel-facts dt {
+  padding: 10px 0;
+  color: var(--color-neutral-700);
+  border-top: 1px solid var(--color-divider);
+}
+
+.detail-panel-facts dd {
+  margin: 0;
+  padding: 10px 0;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  border-top: 1px solid var(--color-divider);
+}
+
+.detail-panel-facts dt:last-of-type,
+.detail-panel-facts dd:last-of-type {
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.detail-panel-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.detail-panel-link {
+  flex: 1;
+  justify-content: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .detail-panel {
+    top: auto;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: auto;
+    max-width: none;
+    max-height: 70%;
+    border-radius: 28px 28px 0 0;
+  }
+
+  .detail-panel-sheet-handle {
+    display: block;
+    width: 44px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--color-neutral-400);
+    align-self: center;
+  }
+}

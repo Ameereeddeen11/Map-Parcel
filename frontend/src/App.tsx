@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="app">
       <Header selectedKu={selected?.katastralniUzemi ?? null} />
-      <MapView onSelectedChange={setSelected} />
+      <MapView selected={selected} onSelectedChange={setSelected} />
     </div>
   )
 }

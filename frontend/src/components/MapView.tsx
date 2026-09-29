@@ -1,7 +1,8 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import type { ParcelaProperties, ParcelyFeatureCollection } from '../api/types'
 import { INITIAL_ZOOM, JICIN_CENTER, MAX_ZOOM, MIN_ZOOM } from '../constants'
+import DetailPanel from './DetailPanel'
 import LoadingIndicator from './LoadingIndicator'
 import MapDataController from './MapDataController'
 import ParcelLayer from './ParcelLayer'
@@ -9,22 +10,14 @@ import ZoomControls from './ZoomControls'
 import './MapView.css'
 
 interface MapViewProps {
+  selected: ParcelaProperties | null
   onSelectedChange: (properties: ParcelaProperties | null) => void
 }
 
-function MapView({ onSelectedChange }: MapViewProps) {
+function MapView({ selected, onSelectedChange }: MapViewProps) {
   const [data, setData] = useState<ParcelyFeatureCollection | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-
-  const handleSelect = useCallback(
-    (properties: ParcelaProperties) => {
-      setSelectedId(properties.id)
-      onSelectedChange(properties)
-    },
-    [onSelectedChange],
-  )
 
   return (
     <div className="map-view">
@@ -43,11 +36,12 @@ function MapView({ onSelectedChange }: MapViewProps) {
         />
         <MapDataController onDataChange={setData} onLoadingChange={setLoading} onErrorChange={setError} />
         {data && (
-          <ParcelLayer data={data} selectedId={selectedId} onSelect={handleSelect} />
+          <ParcelLayer data={data} selectedId={selected?.id ?? null} onSelect={onSelectedChange} />
         )}
         <ZoomControls />
       </MapContainer>
       <LoadingIndicator loading={loading} error={error} />
+      <DetailPanel key={selected?.id ?? 'none'} parcela={selected} onClose={() => onSelectedChange(null)} />
     </div>
   )
 }
