@@ -109,6 +109,8 @@ zapomenutým souborem třídy na špatném místě (PSR-4 nesoulad mezi
 cestou a namespace). Bez tohoto nástroje bych to jen hádal.
 
 ### CORS
-Backend a frontend běží na různých portech/originech (`nelmio/cors-bundle`).
-Povoleno jen pro `localhost` s libovolným portem — v produkci by se zúžilo
-na konkrétní doménu.
+Backend a frontend běží na různých portech/originech (`nelmio/cors-bundle`,
+povoleno pro libovolný `localhost` port). Odhalil se tím i chybějící řádek
+v `Kernel.php` — protože kernel je psaný ručně (bez `symfony/skeleton`),
+`config/packages/*.yaml` se nenačítalo automaticky, takže konfigurace
+nainstalovaného bundlu byla zcela ignorována, bez jakékoliv chybové hlášky.
