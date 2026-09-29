@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 import type { Feature as GeoJsonFeature, Geometry } from 'geojson'
 import type { Layer, Path, PathOptions } from 'leaflet'
-import { GeoJSON as LeafletGeoJSON } from 'leaflet'
 import { GeoJSON } from 'react-leaflet'
 import type { ParcelaProperties, ParcelyFeatureCollection } from '../api/types'
 import { cssVar } from '../utils/theme'
@@ -45,8 +44,20 @@ function selectedStyle(): PathOptions {
 }
 
 function ParcelLayer({ data, selectedId, onSelect }: ParcelLayerProps) {
-  const layerRef = useRef<LeafletGeoJSON | null>(null)
+  // react-leaflet's GeoJSON binds onEachFeature's handlers once, when each
+  // layer is created, and never rebinds them — so a mouseover/mouseout
+  // handler that closed directly over `selectedId` would keep whatever
+  // value was current at creation time forever. Read it from a ref instead
+  // so the (stable, never-recreated) handlers always see the live value.
+  const selectedIdRef = useRef(selectedId)
+  useEffect(() => {
+    selectedIdRef.current = selectedId
+  }, [selectedId])
 
+  // Unlike onEachFeature, `style` IS re-applied on every update (react-leaflet
+  // calls layer.setStyle(style) whenever this prop's identity changes), so
+  // depending on selectedId here is fine and is what drives re-styling the
+  // whole layer group when the selection changes.
   const style = useCallback(
     (feature?: Parcela): PathOptions =>
       feature?.properties.id === selectedId ? selectedStyle() : baseStyle(),
@@ -58,31 +69,19 @@ function ParcelLayer({ data, selectedId, onSelect }: ParcelLayerProps) {
       const path = layer as Path
       layer.on({
         mouseover: () => {
-          if (feature.properties.id !== selectedId) path.setStyle(hoverStyle())
+          if (feature.properties.id !== selectedIdRef.current) path.setStyle(hoverStyle())
           path.bringToFront()
         },
         mouseout: () => {
-          if (feature.properties.id !== selectedId) path.setStyle(baseStyle())
+          if (feature.properties.id !== selectedIdRef.current) path.setStyle(baseStyle())
         },
         click: () => onSelect(feature.properties),
       })
     },
-    [selectedId, onSelect],
+    [onSelect],
   )
 
-  useEffect(() => {
-    const layerGroup = layerRef.current
-    if (!layerGroup) return
-    layerGroup.eachLayer((layer) => {
-      const feature = (layer as Layer & { feature?: Parcela }).feature
-      if (!feature) return
-      ;(layer as Path).setStyle(feature.properties.id === selectedId ? selectedStyle() : baseStyle())
-    })
-  }, [selectedId])
-
-  return (
-    <GeoJSON ref={layerRef} data={data} style={style} onEachFeature={onEachFeature} />
-  )
+  return <GeoJSON data={data} style={style} onEachFeature={onEachFeature} />
 }
 
 export default ParcelLayer

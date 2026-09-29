@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import type { ParcelaProperties, ParcelyFeatureCollection } from '../api/types'
 import { INITIAL_ZOOM, JICIN_CENTER, MAX_ZOOM, MIN_ZOOM } from '../constants'
@@ -17,9 +17,18 @@ interface MapViewProps {
 
 function MapView({ selected, onSelectedChange }: MapViewProps) {
   const [data, setData] = useState<ParcelyFeatureCollection | null>(null)
+  const [dataVersion, setDataVersion] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [tooLarge, setTooLarge] = useState(false)
+
+  // react-leaflet's <GeoJSON> never re-reads its `data` prop after the layer
+  // is created, so a fresh fetch result needs a remount (via `key` below) to
+  // actually reach the map — bump a version counter each time new data comes in.
+  const handleDataChange = useCallback((result: ParcelyFeatureCollection | null) => {
+    setData(result)
+    setDataVersion((v) => v + 1)
+  }, [])
 
   return (
     <div className="map-view">
@@ -37,13 +46,18 @@ function MapView({ selected, onSelectedChange }: MapViewProps) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <MapDataController
-          onDataChange={setData}
+          onDataChange={handleDataChange}
           onLoadingChange={setLoading}
           onErrorChange={setError}
           onTooLargeChange={setTooLarge}
         />
         {data && (
-          <ParcelLayer data={data} selectedId={selected?.id ?? null} onSelect={onSelectedChange} />
+          <ParcelLayer
+            key={dataVersion}
+            data={data}
+            selectedId={selected?.id ?? null}
+            onSelect={onSelectedChange}
+          />
         )}
         <ZoomControls />
         <ZoomHint visible={tooLarge} />
