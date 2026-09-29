@@ -107,3 +107,8 @@ Přidal jsem `bin/console` (Symfony Console) hlavně kvůli
 "circular reference" chyby, která nakonec byla způsobená starým,
 zapomenutým souborem třídy na špatném místě (PSR-4 nesoulad mezi
 cestou a namespace). Bez tohoto nástroje bych to jen hádal.
+
+### CORS
+Backend a frontend běží na různých portech/originech (`nelmio/cors-bundle`).
+Povoleno jen pro `localhost` s libovolným portem — v produkci by se zúžilo
+na konkrétní doménu.
