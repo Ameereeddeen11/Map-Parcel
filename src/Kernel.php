@@ -14,6 +14,7 @@ class Kernel extends BaseKernel
 
     private function configureContainer(ContainerConfigurator $container): void
     {
+        $container->import('../config/packages/*.yaml');
         $container->import('../config/services.yaml');
     }
 
